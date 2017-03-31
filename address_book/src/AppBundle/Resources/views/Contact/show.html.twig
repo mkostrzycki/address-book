@@ -1,0 +1,9 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+    <p><a href="{{ path('app_contact_showall') }}">Show all contacts</a></p>
+
+    {{ contact.name }} {{ contact.surname }}
+
+{% endblock %}

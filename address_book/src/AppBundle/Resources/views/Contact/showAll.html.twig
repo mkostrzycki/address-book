@@ -1,0 +1,22 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+    <p><a href="{{ path('app_contact_new') }}">Add new contact</a></p>
+
+    <ul>
+        {% for contact in contacts %}
+            <li>
+                <a href="{{ path('app_contact_show', {'id': contact.id}) }}">{{ contact.name }} {{ contact.surname }}</a>
+                <form action="{{ path('app_contact_delete', {'id': contact.id}) }}" method="POST">
+                    <input name="_method" type="hidden" value="DELETE">
+                    <input type="submit" value="Delete">
+                </form>
+                <a href="{{ path('app_contact_modify', {'id': contact.id}) }}">Modify</a>
+            </li>
+        {% else %}
+            <p>No contacts found</p>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
