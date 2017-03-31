@@ -37,7 +37,7 @@ class ContactController extends Controller
             $em->persist($contact);
             $em->flush();
 
-            return $this->redirectToRoute('app_contact_showall');
+            return $this->redirectToRoute('app_contact_show', ['id' => $contact->getId()]);
         }
 
         return [

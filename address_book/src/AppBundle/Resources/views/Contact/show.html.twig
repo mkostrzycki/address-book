@@ -6,4 +6,17 @@
 
     {{ contact.name }} {{ contact.surname }}
 
+    <hr>
+
+    <h3>Addresses</h3>
+    <ul>
+        {% for address in contact.addresses %}
+            <li>{{ address.city }}, {{ address.streetName }} {{ address.streetNumber }}</li>
+        {% else %}
+            <p>No addresses found</p>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ path('app_address_new', {'contactId': contact.id}) }}">Add address</a>
+
 {% endblock %}
