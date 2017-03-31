@@ -46,3 +46,8 @@
 
 # Backup entities generated with doctrine:generate:entities command
 */Entity/*~
+
+### macOS ###
+*.DS_Store
+.AppleDouble
+.LSOverride
