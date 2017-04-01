@@ -4,12 +4,15 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Contact
  *
  * @ORM\Table(name="contact")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ContactRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Contact
 {
@@ -59,17 +62,37 @@ class Contact
      */
     private $emailAddresses;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="picture_path", type="string", length=255)
+     */
+    private $picturePath;
+
+    /**
+     * @var UploadedFile
+     *
+     * @Assert\File(maxSize="5M")
+     * @Assert\File(mimeTypes={ "image/jpeg", "image/png" })
+     */
+    private $pictureFile;
+
+    /**
+     * Contact constructor.
+     */
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
         $this->phoneNumbers = new ArrayCollection();
         $this->emailAddresses = new ArrayCollection();
+        // default picture for new contacts
+        $this->picturePath = 'noPicture.png';
     }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -92,7 +115,7 @@ class Contact
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -115,7 +138,7 @@ class Contact
     /**
      * Get surname
      *
-     * @return string 
+     * @return string
      */
     public function getSurname()
     {
@@ -138,7 +161,7 @@ class Contact
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -171,7 +194,7 @@ class Contact
     /**
      * Get addresses
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getAddresses()
     {
@@ -204,7 +227,7 @@ class Contact
     /**
      * Get phoneNumbers
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getPhoneNumbers()
     {
@@ -237,10 +260,115 @@ class Contact
     /**
      * Get emailAddresses
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getEmailAddresses()
     {
         return $this->emailAddresses;
+    }
+
+    /**
+     * Get picture path
+     *
+     * @return string
+     */
+    public function getPicturePath()
+    {
+        return $this->picturePath;
+    }
+
+    /**
+     * Set picture path
+     *
+     * @param $picturePath
+     * @return $this
+     */
+    public function setPicturePath($picturePath)
+    {
+        $this->picturePath = $picturePath;
+
+        return $this;
+    }
+
+    /**
+     * Get uploaded picture file
+     *
+     * @return UploadedFile
+     */
+    public function getPictureFile()
+    {
+        return $this->pictureFile;
+    }
+
+    /**
+     * Set uploaded picture file
+     *
+     * @param UploadedFile $pictureFile
+     * @return $this
+     */
+    public function setPictureFile($pictureFile)
+    {
+        $this->pictureFile = $pictureFile;
+
+        return $this;
+    }
+
+    public function getAbsolutePicturePath()
+    {
+        return null === $this->picturePath ? null : $this->getUploadRootDir() . '/' . $this->picturePath;
+    }
+
+    public function getWebPicturePath()
+    {
+        return null === $this->picturePath ? null : $this->getUploadDir() . '/' . $this->picturePath;
+    }
+
+    protected function getUploadRootDir()
+    {
+        // the absolute directory path where uploaded documents should be saved
+        return __DIR__ . '/../../../web/' . $this->getUploadDir();
+    }
+
+    protected function getUploadDir()
+    {
+        // get rid of the __DIR__ so it doesn't screw when displaying uploaded doc/image in the view.
+        return 'uploads/pictures';
+    }
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUpload()
+    {
+        if (null !== $this->pictureFile) {
+            // unikalna nazwa
+            $this->setPicturePath(uniqid() . '.' . $this->pictureFile->guessExtension());
+        }
+    }
+
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function upload()
+    {
+        if (null === $this->pictureFile) {
+            return;
+        }
+
+        $this->pictureFile->move($this->getUploadRootDir(), $this->picturePath);
+
+        unset($this->pictureFile);
+    }
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload()
+    {
+        if ($file = $this->getAbsolutePicturePath()) {
+            unlink($file);
+        }
     }
 }

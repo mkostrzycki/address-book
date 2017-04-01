@@ -3,6 +3,7 @@
 namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,7 +17,11 @@ class ContactType extends AbstractType
         $builder
             ->add('name')
             ->add('surname')
-            ->add('description');
+            ->add('description')
+            ->add('pictureFile', FileType::class, [
+                'label' => 'Contact picture (jpg or png image)',
+                'required' => false
+            ]);
     }
     
     /**

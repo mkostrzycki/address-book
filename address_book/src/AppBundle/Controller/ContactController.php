@@ -48,7 +48,7 @@ class ContactController extends Controller
     /**
      * @Route("/{id}/modify")
      * @Template("AppBundle:Contact:modify.html.twig")
-     * @return array
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function modifyAction(Request $request, $id)
     {

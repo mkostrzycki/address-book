@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Contact
@@ -59,6 +60,19 @@ class Contact
      */
     private $emailAddresses;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="image", type="string", length=255)
+     *
+     * @Assert\NotBlank(message="Please, upload the contact picture as a img file.")
+     * @Assert\File(mimeTypes={ "image/jpeg" })
+     */
+    private $picture;
+
+    /**
+     * Contact constructor.
+     */
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
@@ -209,5 +223,61 @@ class Contact
     public function getPhoneNumbers()
     {
         return $this->phoneNumbers;
+    }
+
+    /**
+     * Add emailAddresses
+     *
+     * @param \AppBundle\Entity\EmailAddress $emailAddresses
+     * @return Contact
+     */
+    public function addEmailAddress(\AppBundle\Entity\EmailAddress $emailAddresses)
+    {
+        $this->emailAddresses[] = $emailAddresses;
+
+        return $this;
+    }
+
+    /**
+     * Remove emailAddresses
+     *
+     * @param \AppBundle\Entity\EmailAddress $emailAddresses
+     */
+    public function removeEmailAddress(\AppBundle\Entity\EmailAddress $emailAddresses)
+    {
+        $this->emailAddresses->removeElement($emailAddresses);
+    }
+
+    /**
+     * Get emailAddresses
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEmailAddresses()
+    {
+        return $this->emailAddresses;
+    }
+
+    /**
+     * Get picture
+     *
+     * @return string
+     */
+    public function getPicture()
+    {
+        return $this->picture;
+    }
+
+    /**
+     * Set picture
+     *
+     * @param $picture
+     * @return $this
+     */
+    public function setPicture($picture)
+    {
+        $this->picture = $picture;
+
+        return $this;
     }
 }

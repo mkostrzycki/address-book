@@ -4,6 +4,7 @@
 
     <p><a href="{{ path('app_contact_showall') }}">Show all contacts</a></p>
 
+    <img src="{{ asset(contact.webPicturePath)|default(asset('uploads/pictures/noPicture.png')) }}" width="100px" height="100px">
     <p>{{ contact.name }} {{ contact.surname }}</p>
     <p>{{ contact.description }}</p>
 
