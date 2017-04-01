@@ -4,7 +4,8 @@
 
     <p><a href="{{ path('app_contact_showall') }}">Show all contacts</a></p>
 
-    {{ contact.name }} {{ contact.surname }}
+    <p>{{ contact.name }} {{ contact.surname }}</p>
+    <p>{{ contact.description }}</p>
 
     <hr>
 
@@ -51,5 +52,28 @@
     </ul>
 
     <a href="{{ path('app_phonenumber_new', {'contactId': contact.id}) }}">Add phone number</a>
+
+    <hr>
+
+    <h3>Email addresses</h3>
+    <ul>
+        {% for emailAddress in contact.emailAddresses %}
+            <li>
+                {{ emailAddress.type }} | {{ emailAddress.address }}
+                |
+                <form action="{{ path('app_emailaddress_delete', {'contactId': contact.id, 'emailAddressId': emailAddress.id}) }}"
+                      method="POST">
+                    <input name="_method" type="hidden" value="DELETE">
+                    <input type="submit" value="Delete">
+                </form>
+                |
+                <a href="{{ path('app_emailaddress_modify', {'contactId': contact.id, 'emailAddressId': emailAddress.id}) }}">modify</a>
+            </li>
+        {% else %}
+            <p>No email addresses found :(</p>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ path('app_emailaddress_new', {'contactId': contact.id}) }}">Add email address</a>
 
 {% endblock %}

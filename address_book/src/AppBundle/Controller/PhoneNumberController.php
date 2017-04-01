@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\PhoneNumber;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -88,6 +89,7 @@ class PhoneNumberController extends Controller
 
     /**
      * @Route("/{contactId}/{phoneNumberId}/delete")
+     * @Method("DELETE")
      * @param $contactId
      * @param $phoneNumberId
      * @return \Symfony\Component\HttpFoundation\RedirectResponse

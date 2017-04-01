@@ -2,21 +2,18 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Address;
+use AppBundle\Entity\EmailAddress;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * @Route("/address")
- */
-class AddressController extends Controller
+class EmailAddressController extends Controller
 {
     /**
      * @Route("/{contactId}/new")
-     * @Template("AppBundle:Address:new.html.twig")
+     * @Template("AppBundle:EmailAddress:new.html.twig")
      * @param Request $request
      * @param $contactId
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
@@ -31,22 +28,22 @@ class AddressController extends Controller
             throw $this->createNotFoundException('Contact not found');
         }
 
-        $address = new Address();
+        $emailAddress = new EmailAddress();
 
-        $form = $this->createForm('AppBundle\Form\AddressType', $address);
+        $form = $this->createForm('AppBundle\Form\EmailAddressType', $emailAddress);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $contact->addAddress($address);
-            $address->setContact($contact);
+            $contact->addEmailAddress($emailAddress);
+            $emailAddress->setContact($contact);
 
             $em = $this
                 ->getDoctrine()
                 ->getManager();
 
-            $em->persist($address);
+            $em->persist($emailAddress);
             $em->flush();
 
             return $this->redirectToRoute('app_contact_show', ['id' => $contactId]);
@@ -58,24 +55,24 @@ class AddressController extends Controller
     }
 
     /**
-     * @Route("/{contactId}/{addressId}/modify")
-     * @Template("AppBundle:Address:modify.html.twig")
+     * @Route("/{contactId}/{emailAddressId}/modify")
+     * @Template("AppBundle:EmailAddress:modify.html.twig")
      * @param Request $request
      * @param $contactId
-     * @param $addressId
+     * @param $emailAddressId
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function modifyAction(Request $request, $contactId, $addressId)
+    public function modifyAction(Request $request, $contactId, $emailAddressId)
     {
-        $address = $this
+        $emailAddress = $this
             ->getDoctrine()
-            ->getRepository('AppBundle:Address')->find($addressId);
+            ->getRepository('AppBundle:EmailAddress')->find($emailAddressId);
 
-        if (!$address) {
-            throw $this->createNotFoundException('Address not found');
+        if (!$emailAddress) {
+            throw $this->createNotFoundException('Email address not found');
         }
 
-        $form = $this->createForm('AppBundle\Form\AddressType', $address);
+        $form = $this->createForm('AppBundle\Form\EmailAddressType', $emailAddress);
 
         $form->handleRequest($request);
 
@@ -96,27 +93,27 @@ class AddressController extends Controller
     }
 
     /**
-     * @Route("/{contactId}/{addressId}/delete")
+     * @Route("{contactId}/{emailAddressId}/delete")
      * @Method("DELETE")
      * @param $contactId
-     * @param $addressId
+     * @param $emailAddressId
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteAction($contactId, $addressId)
+    public function deleteAction($contactId, $emailAddressId)
     {
-        $address = $this
+        $emailAddress = $this
             ->getDoctrine()
-            ->getRepository('AppBundle:Address')->find($addressId);
+            ->getRepository('AppBundle:EmailAddress')->find($emailAddressId);
 
-        if (!$address) {
-            throw $this->createNotFoundException('Address not found');
+        if (!$emailAddress) {
+            throw $this->createNotFoundException('Email address not found');
         }
 
         $em = $this
             ->getDoctrine()
             ->getManager();
 
-        $em->remove($address);
+        $em->remove($emailAddress);
         $em->flush();
 
         return $this->redirectToRoute('app_contact_show', ['id' => $contactId]);
