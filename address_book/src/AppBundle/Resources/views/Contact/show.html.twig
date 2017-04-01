@@ -13,14 +13,17 @@
         {% for address in contact.addresses %}
             <li>
                 {{ address.type }} | {{ address.city }}, {{ address.streetName }} {{ address.streetNumber }}
-                | <form action="{{ path('app_address_delete', {'contactId': contact.id, 'addressId': address.id}) }}" method="POST">
+                |
+                <form action="{{ path('app_address_delete', {'contactId': contact.id, 'addressId': address.id}) }}"
+                      method="POST">
                     <input name="_method" type="hidden" value="DELETE">
                     <input type="submit" value="Delete">
                 </form>
-                | <a href="{{ path('app_address_modify', {'contactId': contact.id, 'addressId': address.id}) }}">modify</a>
+                |
+                <a href="{{ path('app_address_modify', {'contactId': contact.id, 'addressId': address.id}) }}">modify</a>
             </li>
         {% else %}
-            <p>No addresses found</p>
+            <p>No addresses found :(</p>
         {% endfor %}
     </ul>
 
@@ -28,6 +31,25 @@
 
     <hr>
 
-    <h3></h3>
+    <h3>Phone numbers</h3>
+    <ul>
+        {% for phoneNumber in contact.phoneNumbers %}
+            <li>
+                {{ phoneNumber.type }} | {{ phoneNumber.number }}
+                |
+                <form action="{{ path('app_phonenumber_delete', {'contactId': contact.id, 'phoneNumberId': phoneNumber.id}) }}"
+                      method="POST">
+                    <input name="_method" type="hidden" value="DELETE">
+                    <input type="submit" value="Delete">
+                </form>
+                |
+                <a href="{{ path('app_phonenumber_modify', {'contactId': contact.id, 'phoneNumberId': phoneNumber.id}) }}">modify</a>
+            </li>
+        {% else %}
+            <p>No phone numbers found :(</p>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ path('app_phonenumber_new', {'contactId': contact.id}) }}">Add phone number</a>
 
 {% endblock %}
