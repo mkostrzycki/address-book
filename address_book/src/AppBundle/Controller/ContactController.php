@@ -66,7 +66,6 @@ class ContactController extends Controller
                 ->getDoctrine()
                 ->getManager();
 
-            $em->persist($contact);
             $em->flush();
 
             return $this->redirectToRoute('app_contact_showall');

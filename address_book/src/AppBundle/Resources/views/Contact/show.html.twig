@@ -11,12 +11,23 @@
     <h3>Addresses</h3>
     <ul>
         {% for address in contact.addresses %}
-            <li>{{ address.city }}, {{ address.streetName }} {{ address.streetNumber }}</li>
+            <li>
+                {{ address.type }} | {{ address.city }}, {{ address.streetName }} {{ address.streetNumber }}
+                | <form action="{{ path('app_address_delete', {'contactId': contact.id, 'addressId': address.id}) }}" method="POST">
+                    <input name="_method" type="hidden" value="DELETE">
+                    <input type="submit" value="Delete">
+                </form>
+                | <a href="{{ path('app_address_modify', {'contactId': contact.id, 'addressId': address.id}) }}">modify</a>
+            </li>
         {% else %}
             <p>No addresses found</p>
         {% endfor %}
     </ul>
 
     <a href="{{ path('app_address_new', {'contactId': contact.id}) }}">Add address</a>
+
+    <hr>
+
+    <h3></h3>
 
 {% endblock %}

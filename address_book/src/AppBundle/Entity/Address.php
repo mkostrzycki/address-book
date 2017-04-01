@@ -24,6 +24,13 @@ class Address
     /**
      * @var string
      *
+     * @ORM\Column(name="type", type="string", length=255)
+     */
+    private $type;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="city", type="string", length=255)
      */
     private $city;
@@ -36,9 +43,9 @@ class Address
     private $streetName;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="street_number", type="integer", nullable=true)
+     * @ORM\Column(name="street_number", type="string", length=20, nullable=true)
      */
     private $streetNumber;
 
@@ -177,5 +184,28 @@ class Address
     public function getContact()
     {
         return $this->contact;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     * @return Address
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string 
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }

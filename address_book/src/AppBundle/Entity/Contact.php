@@ -54,6 +54,16 @@ class Contact
     }
 
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PhoneNumber")
+     */
+    private $phoneNumbers;
+
+    public function __construct()
+    {
+        $this->phoneNumbers = new ArrayCollection();
+    }
+
+    /**
      * Get id
      *
      * @return integer 

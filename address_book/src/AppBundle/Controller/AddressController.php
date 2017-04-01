@@ -54,6 +54,7 @@ class AddressController extends Controller
 
     /**
      * @Route("/{contactId}/{addressId}/modify")
+     * @Template("AppBundle:Address:modify.html.twig")
      * @param Request $request
      * @param $contactId
      * @param $addressId
@@ -75,7 +76,6 @@ class AddressController extends Controller
                 ->getDoctrine()
                 ->getManager();
 
-            $em->persist($address);
             $em->flush();
 
             return $this->redirectToRoute('app_contact_show', ['id' => $contactId]);
@@ -87,7 +87,7 @@ class AddressController extends Controller
     }
 
     /**
-     * @Route("/{contactID}/{addressId}/delete")
+     * @Route("/{contactId}/{addressId}/delete")
      * @param $contactId
      * @param $addressId
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
@@ -109,6 +109,6 @@ class AddressController extends Controller
         $em->remove($address);
         $em->flush();
 
-        return $this->redirectToRoute('app_contact_show', ['id', $contactId]);
+        return $this->redirectToRoute('app_contact_show', ['id' => $contactId]);
     }
 }

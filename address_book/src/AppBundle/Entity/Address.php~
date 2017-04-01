@@ -24,6 +24,13 @@ class Address
     /**
      * @var string
      *
+     * @ORM\Column(name="type", type="string", length=255)
+     */
+    private $type;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="city", type="string", length=255)
      */
     private $city;
@@ -36,9 +43,9 @@ class Address
     private $streetName;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="street_number", type="integer", nullable=true)
+     * @ORM\Column(name="street_number", type="string", length=20, nullable=true)
      */
     private $streetNumber;
 
@@ -154,5 +161,28 @@ class Address
     public function getFlatNumber()
     {
         return $this->flatNumber;
+    }
+
+    /**
+     * Set contact
+     *
+     * @param \AppBundle\Entity\Contact $contact
+     * @return Address
+     */
+    public function setContact(\AppBundle\Entity\Contact $contact = null)
+    {
+        $this->contact = $contact;
+
+        return $this;
+    }
+
+    /**
+     * Get contact
+     *
+     * @return \AppBundle\Entity\Contact 
+     */
+    public function getContact()
+    {
+        return $this->contact;
     }
 }
