@@ -111,8 +111,19 @@ class ContactController extends Controller
             ->getDoctrine()
             ->getRepository('AppBundle:Contact')->find($id);
 
+        if (!$contact) {
+            throw $this->createNotFoundException('No contact found');
+        }
+
+        // for adding contact to group
+        /** @ToDo: Get only the groups, that contact not belong to */
+        $contactGroups = $this
+            ->getDoctrine()
+            ->getRepository('AppBundle:ContactGroup')->findAll();
+
         return [
-            'contact' => $contact
+            'contact' => $contact,
+            'contactGroups' => $contactGroups
         ];
     }
 
@@ -130,5 +141,85 @@ class ContactController extends Controller
         return [
             'contacts' => $contacts
         ];
+    }
+
+    /**
+     * @Route("/contactGroup/add")
+     * @Method("POST")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @internal param integer $contactId
+     * @internal param integer $contactGroupId
+     */
+    public function addToGroup(Request $request)
+    {
+        $contactId = $request->request->get('contactId');
+        $contactGroupId = $request->request->get('contactGroupId');
+
+        $contact = $this
+            ->getDoctrine()
+            ->getRepository('AppBundle:Contact')->find($contactId);
+
+        if (!$contact) {
+            throw $this->createNotFoundException('Contact not found');
+        }
+
+        $contactGroup = $this
+            ->getDoctrine()
+            ->getRepository('AppBundle:ContactGroup')->find($contactGroupId);
+
+        if (!$contactGroup) {
+            throw $this->createNotFoundException('Contact group not found');
+        }
+
+        $contact->addContactGroup($contactGroup);
+        $contactGroup->addContact($contact);
+
+        $em = $this
+            ->getDoctrine()
+            ->getManager();
+
+        $em->flush();
+
+        return $this->redirectToRoute('app_contact_show', ['id' => $contactId]);
+    }
+
+    /**
+     * @Route("/contactGroup/remove")
+     * @Method("POST")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function removeFromGroup(Request $request)
+    {
+        $contactId = $request->request->get('contactId');
+        $contactGroupId = $request->request->get('contactGroupId');
+
+        $contact = $this
+            ->getDoctrine()
+            ->getRepository('AppBundle:Contact')->find($contactId);
+
+        if (!$contact) {
+            throw $this->createNotFoundException('Contact not found');
+        }
+
+        $contactGroup = $this
+            ->getDoctrine()
+            ->getRepository('AppBundle:ContactGroup')->find($contactGroupId);
+
+        if (!$contactGroup) {
+            throw $this->createNotFoundException('Contact group not found');
+        }
+
+        $contact->removeContactGroup($contactGroup);
+        $contactGroup->removeContact($contact);
+
+        $em = $this
+            ->getDoctrine()
+            ->getManager();
+
+        $em->flush();
+
+        return $this->redirectToRoute('app_contact_show', ['id' => $contactId]);
     }
 }

@@ -1,0 +1,47 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+    <div>
+        <p><a href="{{ path('app_contactgroup_new') }}">Add new group</a></p>
+
+        <h3>{{ contactGroup.name }}</h3>
+        |
+        <form action="{{ path('app_contactgroup_delete', {'contactGroupId': contactGroup.id}) }}" method="POST">
+            <input name="_method" type="hidden" value="DELETE">
+            <input type="submit" value="Delete">
+        </form>
+        |
+        <a href="{{ path('app_contactgroup_modify', {'contactGroupId': contactGroup.id}) }}">modify</a>
+
+        <ul>
+            <li><a href="{{ path('app_contactgroup_showall') }}">All contacts</a></li>
+            {% for group in contactGroups %}
+                <li>
+                    <a href="{{ path('app_contactgroup_show', {'contactGroupId': group.id}) }}">{{ group.name }}</a>
+                </li>
+            {% else %}
+                <p>No group found :(</p>
+            {% endfor %}
+        </ul>
+    </div>
+    <div>
+        <p><a href="{{ path('app_contact_new') }}">Add new contact</a></p>
+
+        <ul>
+            {% for contact in contactGroup.contacts %}
+                <li>
+                    <a href="{{ path('app_contact_show', {'id': contact.id}) }}">{{ contact.name }} {{ contact.surname }}</a>
+                    <form action="{{ path('app_contact_delete', {'id': contact.id}) }}" method="POST">
+                        <input name="_method" type="hidden" value="DELETE">
+                        <input type="submit" value="Delete">
+                    </form>
+                    <a href="{{ path('app_contact_modify', {'id': contact.id}) }}">Modify</a>
+                </li>
+            {% else %}
+                <p>No contacts found</p>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}

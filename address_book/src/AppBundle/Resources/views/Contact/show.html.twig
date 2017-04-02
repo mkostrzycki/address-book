@@ -8,6 +8,33 @@
     <p>{{ contact.name }} {{ contact.surname }}</p>
     <p>{{ contact.description }}</p>
 
+    <h5>Contact groups:</h5>
+    <ul>
+        {% for group in contact.contactGroups %}
+            <li>
+                {{ group.name }} |
+                <form action="{{ path('app_contact_removefromgroup') }}" method="POST">
+                    <input name="contactId" type="hidden" value="{{ contact.id }}">
+                    <input name="contactGroupId" type="hidden" value="{{ group.id }}">
+                    <input type="submit" value="Remove from group">
+                </form>
+            </li>
+        {% else %}
+            <p>No group found</p>
+        {% endfor %}
+    </ul>
+
+    <p>Add contact to group:</p>
+    <form action="{{ path('app_contact_addtogroup') }}" method="POST">
+        <input name="contactId" type="hidden" value="{{ contact.id }}">
+        <select name="contactGroupId">
+            {% for group in contactGroups %}
+                <option value="{{ group.id }}">{{ group.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Add to group">
+    </form>
+
     <hr>
 
     <h3>Addresses</h3>

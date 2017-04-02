@@ -57,10 +57,18 @@ class Contact
     private $phoneNumbers;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\EmailAddress", mappedBy="contact")
      * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\EmailAddress", mappedBy="contact")
      */
     private $emailAddresses;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\ContactGroup", mappedBy="contacts")
+     */
+    private $contactGroups;
 
     /**
      * @var string
@@ -72,7 +80,7 @@ class Contact
     /**
      * @var UploadedFile
      *
-     * @Assert\File(maxSize="5M")
+     * @Assert\File(maxSize="1M")
      * @Assert\File(mimeTypes={ "image/jpeg", "image/png" })
      */
     private $pictureFile;
@@ -85,6 +93,7 @@ class Contact
         $this->addresses = new ArrayCollection();
         $this->phoneNumbers = new ArrayCollection();
         $this->emailAddresses = new ArrayCollection();
+        $this->contactGroups = new ArrayCollection();
         // default picture for new contacts
         $this->picturePath = 'noPicture.png';
     }
@@ -169,26 +178,26 @@ class Contact
     }
 
     /**
-     * Add addresses
+     * Add addresse
      *
-     * @param \AppBundle\Entity\Address $addresses
+     * @param Address $address
      * @return Contact
      */
-    public function addAddress(\AppBundle\Entity\Address $addresses)
+    public function addAddress(Address $address)
     {
-        $this->addresses[] = $addresses;
+        $this->addresses[] = $address;
 
         return $this;
     }
 
     /**
-     * Remove addresses
+     * Remove address
      *
-     * @param \AppBundle\Entity\Address $addresses
+     * @param Address $address
      */
-    public function removeAddress(\AppBundle\Entity\Address $addresses)
+    public function removeAddress(Address $address)
     {
-        $this->addresses->removeElement($addresses);
+        $this->addresses->removeElement($address);
     }
 
     /**
@@ -202,26 +211,26 @@ class Contact
     }
 
     /**
-     * Add phoneNumbers
+     * Add phoneNumber
      *
-     * @param \AppBundle\Entity\PhoneNumber $phoneNumbers
+     * @param PhoneNumber $phoneNumber
      * @return Contact
      */
-    public function addPhoneNumber(\AppBundle\Entity\PhoneNumber $phoneNumbers)
+    public function addPhoneNumber(PhoneNumber $phoneNumber)
     {
-        $this->phoneNumbers[] = $phoneNumbers;
+        $this->phoneNumbers[] = $phoneNumber;
 
         return $this;
     }
 
     /**
-     * Remove phoneNumbers
+     * Remove phoneNumber
      *
-     * @param \AppBundle\Entity\PhoneNumber $phoneNumbers
+     * @param PhoneNumber $phoneNumber
      */
-    public function removePhoneNumber(\AppBundle\Entity\PhoneNumber $phoneNumbers)
+    public function removePhoneNumber(PhoneNumber $phoneNumber)
     {
-        $this->phoneNumbers->removeElement($phoneNumbers);
+        $this->phoneNumbers->removeElement($phoneNumber);
     }
 
     /**
@@ -235,26 +244,26 @@ class Contact
     }
 
     /**
-     * Add emailAddresses
+     * Add emailAddress
      *
-     * @param \AppBundle\Entity\EmailAddress $emailAddresses
+     * @param EmailAddress $emailAddress
      * @return Contact
      */
-    public function addEmailAddress(\AppBundle\Entity\EmailAddress $emailAddresses)
+    public function addEmailAddress(EmailAddress $emailAddress)
     {
-        $this->emailAddresses[] = $emailAddresses;
+        $this->emailAddresses[] = $emailAddress;
 
         return $this;
     }
 
     /**
-     * Remove emailAddresses
+     * Remove emailAddress
      *
-     * @param \AppBundle\Entity\EmailAddress $emailAddresses
+     * @param EmailAddress $emailAddress
      */
-    public function removeEmailAddress(\AppBundle\Entity\EmailAddress $emailAddresses)
+    public function removeEmailAddress(EmailAddress $emailAddress)
     {
-        $this->emailAddresses->removeElement($emailAddresses);
+        $this->emailAddresses->removeElement($emailAddress);
     }
 
     /**
@@ -265,6 +274,39 @@ class Contact
     public function getEmailAddresses()
     {
         return $this->emailAddresses;
+    }
+
+    /**
+     * Add contactGroup
+     *
+     * @param ContactGroup $contactGroup
+     * @return Contact
+     */
+    public function addContactGroup(ContactGroup $contactGroup)
+    {
+        $this->contactGroups[] = $contactGroup;
+
+        return $this;
+    }
+
+    /**
+     * Remove contactGroup
+     *
+     * @param ContactGroup $contactGroup
+     */
+    public function removeContactGroup(ContactGroup $contactGroup)
+    {
+        $this->contactGroups->removeElement($contactGroup);
+    }
+
+    /**
+     * Get contactGroups
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContactGroups()
+    {
+        return $this->contactGroups;
     }
 
     /**

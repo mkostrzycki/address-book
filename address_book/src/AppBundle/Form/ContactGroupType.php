@@ -2,30 +2,19 @@
 
 namespace AppBundle\Form;
 
-use AppBundle\Entity\ContactGroup;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ContactType extends AbstractType
+class ContactGroupType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $defaultGroup = new ContactGroup();
-        $defaultGroup->setName('no group');
-
         $builder
-            ->add('name')
-            ->add('surname')
-            ->add('description')
-            ->add('pictureFile', FileType::class, [
-                'label' => 'Contact picture (jpg or png image)',
-                'required' => false
-            ]);
+            ->add('name');
     }
     
     /**
@@ -34,7 +23,7 @@ class ContactType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Contact'
+            'data_class' => 'AppBundle\Entity\ContactGroup'
         ));
     }
 
@@ -43,7 +32,7 @@ class ContactType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_contact';
+        return 'appbundle_contactgroup';
     }
 
 
